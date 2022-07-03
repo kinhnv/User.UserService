@@ -19,18 +19,18 @@ build-user-service:
   only:
     - master
   script:
-    - docker-compose build -f ./docker-compose.user-service.yml
+    - docker-compose -f docker-compose-user-service.yml build
     - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-    - docker-compose push -f ./docker-compose.user-service.yml
+    - docker-compose -f docker-compose-user-service.yml push
 
 build-identity-server:
   stage: build
   only:
     - master
   script:
-    - docker-compose build -f ./docker-compose.identity-server.yml
+    - docker-compose -f docker-compose-identity-server.yml build
     - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-    - docker-compose push -f ./docker-compose.identity-server.yml
+    - docker-compose -f docker-compose-identity-server.yml push
 
 update-github:
   stage: update_github
