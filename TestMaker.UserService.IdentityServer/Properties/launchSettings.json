@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:29836"
+      "applicationUrl": "http://localhost:60001"
     }
   },
   "profiles": {
@@ -13,7 +13,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:7133;http://localhost:5133",
+      "applicationUrl": "http://localhost:60001",
       "dotnetRunMessages": true
     },
     "IIS Express": {
