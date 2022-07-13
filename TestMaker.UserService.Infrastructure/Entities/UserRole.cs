@@ -8,9 +8,9 @@ using TestMaker.Common.Repository;
 
 namespace TestMaker.UserService.Infrastructure.Entities
 {
-    public class RoleUser : Entity
+    public class UserRole : Entity
     {
-        public RoleUser()
+        public UserRole()
         {
             IsDeleted = false;
         }

@@ -17,14 +17,14 @@ namespace TestMaker.UserService.Infrastructure.Entities
 
         public DbSet<Role> Roles { get; set; }
 
-        public DbSet<RoleUser> RoleUsers { get; set; }
+        public DbSet<UserRole> RoleUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasKey(e => e.UserId);
             modelBuilder.Entity<Role>().HasKey(e => e.RoleId);
 
-            modelBuilder.Entity<RoleUser>().HasKey(ca => new
+            modelBuilder.Entity<UserRole>().HasKey(ca => new
             {
                 ca.UserId,
                 ca.RoleId

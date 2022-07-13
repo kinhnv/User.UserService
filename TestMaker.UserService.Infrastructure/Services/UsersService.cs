@@ -40,10 +40,10 @@ namespace TestMaker.UserService.Infrastructure.Services
 
             await _usersRepository.CreateAsync(entity);
 
-            var roleUsers = new List<RoleUser>();
+            var roleUsers = new List<UserRole>();
             user.RoleIds.ForEach(roleId =>
             {
-                roleUsers.Add(new RoleUser
+                roleUsers.Add(new UserRole
                 {
                     RoleId = roleId,
                     UserId = entity.UserId
@@ -78,10 +78,10 @@ namespace TestMaker.UserService.Infrastructure.Services
 
             await _usersRepository.UpdateAsync(_mapper.Map<User>(user));
             await _roleUsersRepository.RemoveRoleUserByUserIdAsync(user.UserId);
-            var roleUsers = new List<RoleUser>();
+            var roleUsers = new List<UserRole>();
             user.RoleIds.ForEach(roleId =>
             {
-                roleUsers.Add(new RoleUser
+                roleUsers.Add(new UserRole
                 {
                     RoleId = roleId,
                     UserId = user.UserId

@@ -9,7 +9,7 @@ using TestMaker.UserService.Infrastructure.Repositories.Roles;
 
 namespace TestMaker.UserService.Infrastructure.Repositories.RoleUsers
 {
-    public class RoleUsersRepository: Repository<RoleUser>, IRoleUsersRepository
+    public class RoleUsersRepository: Repository<UserRole>, IRoleUsersRepository
     {
         public RoleUsersRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
@@ -17,8 +17,8 @@ namespace TestMaker.UserService.Infrastructure.Repositories.RoleUsers
 
         public async Task RemoveRoleUserByUserIdAsync(Guid userId)
         {
-            var roleUsers = _dbContext.Set<RoleUser>().Where(x => x.UserId == userId).ToList();
-            _dbContext.Set<RoleUser>().RemoveRange(roleUsers);
+            var roleUsers = _dbContext.Set<UserRole>().Where(x => x.UserId == userId).ToList();
+            _dbContext.Set<UserRole>().RemoveRange(roleUsers);
             await _dbContext.SaveChangesAsync();
         }
     }

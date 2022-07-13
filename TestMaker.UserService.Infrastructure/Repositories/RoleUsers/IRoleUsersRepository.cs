@@ -8,7 +8,7 @@ using TestMaker.UserService.Infrastructure.Entities;
 
 namespace TestMaker.UserService.Infrastructure.Repositories.RoleUsers
 {
-    public interface IRoleUsersRepository: IRepository<RoleUser>
+    public interface IRoleUsersRepository: IRepository<UserRole>
     {
         Task RemoveRoleUserByUserIdAsync(Guid userId);
     }
