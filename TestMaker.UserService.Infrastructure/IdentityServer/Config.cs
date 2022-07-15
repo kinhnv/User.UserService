@@ -96,8 +96,7 @@ namespace TestMaker.UserService.Infrastructure.IdentityServer
                 },
                 AllowedScopes = { "test-maker" },
                 AllowOfflineAccess = true,
-                RefreshTokenUsage = TokenUsage.OneTimeOnly,
-                AlwaysIncludeUserClaimsInIdToken = true
+                RefreshTokenUsage = TokenUsage.OneTimeOnly
             }
         };
     }
