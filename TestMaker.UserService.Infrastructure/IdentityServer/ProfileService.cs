@@ -24,11 +24,11 @@ namespace TestMaker.UserService.Infrastructure.IdentityServer
             {
                 if (!string.IsNullOrEmpty(context?.Subject?.Identity?.Name))
                 {
-                    var user = (await _usersRepository.GetAsync(x => x.UserName == context.Subject.Identity.Name)).Single();
+                    var userWithRoles = (await _usersRepository.GetUserWithRolesByUserNameAsync(context.Subject.Identity.Name));
 
-                    if (user != null)
+                    if (userWithRoles != null)
                     {
-                        var claims = user.ToClaims();
+                        var claims = userWithRoles.ToClaims();
 
                         //set issued claims to return
                         context.IssuedClaims = claims.Where(x => context.RequestedClaimTypes.Contains(x.Type)).ToList();
@@ -36,26 +36,23 @@ namespace TestMaker.UserService.Infrastructure.IdentityServer
                 }
                 else if (context != null)
                 {
-                    //get subject from context (this was set ResourceOwnerPasswordValidator.ValidateAsync),
-                    //where and subject was set to my user id.
-                    var userId = context.Subject.Claims.FirstOrDefault(x => x.Type == "sub");
+                    var userIdAsString = context.Subject.Claims.FirstOrDefault(x => x.Type == "sub")?.Value ?? String.Empty;
+                    var flag = Guid.TryParse(userIdAsString, out Guid userId);
 
-                    if (!string.IsNullOrEmpty(userId?.Value) && long.Parse(userId.Value) > 0)
+                    if (flag)
                     {
-                        //get user from db (find user by user id)
-                        var user = (await _usersRepository.GetAsync(x => x.UserId == Guid.Parse(userId.Value))).Single();
+                        var userWithRoles = await _usersRepository.GetUserWithRolesByUserIdAsync(userId);
 
-                        // issue the claims for the user
-                        if (user != null)
+                        if (userWithRoles != null)
                         {
-                            var claims = user.ToClaims();
+                            var claims = userWithRoles.ToClaims();
 
                             context.IssuedClaims = claims.Where(x => context.RequestedClaimTypes.Contains(x.Type)).ToList();
                         }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 //log your error
             }
@@ -67,11 +64,12 @@ namespace TestMaker.UserService.Infrastructure.IdentityServer
             try
             {
                 //get subject from context (set in ResourceOwnerPasswordValidator.ValidateAsync),
-                var userId = context.Subject.Claims.FirstOrDefault(x => x.Type == "user_id");
+                var userIdAsString = context.Subject.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value ?? String.Empty;
+                var flag = Guid.TryParse(userIdAsString, out Guid userId);
 
-                if (!string.IsNullOrEmpty(userId?.Value) && long.Parse(userId.Value) > 0)
+                if (flag)
                 {
-                    var user = (await _usersRepository.GetAsync(x => x.UserId == Guid.Parse(userId.Value))).Single();
+                    var user = await _usersRepository.GetAsync(userId);
 
                     if (user != null)
                     {
@@ -82,7 +80,7 @@ namespace TestMaker.UserService.Infrastructure.IdentityServer
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 //handle error logging
             }

@@ -22,17 +22,15 @@ namespace TestMaker.UserService.Infrastructure.IdentityServer
             try
             {
                 //get your user model from db (by username - in my case its email)
-                var user = (await _usersRepository.GetAsync(x => x.UserName == context.UserName)).Single();
-                if (user != null)
+                var userWithRoles = (await _usersRepository.GetUserWithRolesByUserNameAsync(context.UserName));
+                if (userWithRoles != null)
                 {
-                    //check if password match - remember to hash password if stored as hash in db
-                    if (user.Password == context.Password)
+                    if (userWithRoles.User.Password == context.Password)
                     {
-                        //set the result
                         context.Result = new GrantValidationResult(
-                            subject: user.UserId.ToString(),
+                            subject: userWithRoles.User.UserId.ToString(),
                             authenticationMethod: "custom",
-                            claims: user.ToClaims()
+                            claims: userWithRoles.ToClaims()
                         );
 
                         return;

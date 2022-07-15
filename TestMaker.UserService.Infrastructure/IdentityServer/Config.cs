@@ -1,16 +1,77 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityModel;
+using IdentityServer4.Models;
 
 namespace TestMaker.UserService.Infrastructure.IdentityServer
 {
     public static class Config
     {
-        public static IEnumerable<ApiScope> ApiScopes =>
-            new List<ApiScope>
+        public static IEnumerable<ApiResource> ApiResources => new List<ApiResource>
+        {
+            new ApiResource
             {
-                new ApiScope("test-service", "TestMaker.TestService"),
-                new ApiScope("event-service", "TestMaker.EventService"),
-                new ApiScope("user-service", "TestMaker.UserService"),
-            };
+                Name = "test-service",
+                ApiSecrets = { new Secret("secret".Sha256()) },
+                UserClaims = {
+                    JwtClaimTypes.Email,
+                    JwtClaimTypes.EmailVerified,
+                    JwtClaimTypes.PhoneNumber,
+                    JwtClaimTypes.PhoneNumberVerified,
+                    JwtClaimTypes.GivenName,
+                    JwtClaimTypes.FamilyName,
+                    JwtClaimTypes.PreferredUserName,
+                    JwtClaimTypes.Role
+                },
+                Enabled = true,
+                Scopes = {
+                    "test-maker"
+                }
+            },
+            new ApiResource
+            {
+                Name = "event-service",
+                ApiSecrets = { new Secret("secret".Sha256()) },
+                UserClaims = {
+                    JwtClaimTypes.Email,
+                    JwtClaimTypes.EmailVerified,
+                    JwtClaimTypes.PhoneNumber,
+                    JwtClaimTypes.PhoneNumberVerified,
+                    JwtClaimTypes.GivenName,
+                    JwtClaimTypes.FamilyName,
+                    JwtClaimTypes.PreferredUserName,
+                    JwtClaimTypes.Role
+                },
+                Enabled = true,
+                Scopes = {
+                    "test-maker"
+                }
+            },
+            new ApiResource
+            {
+                Name = "user-service",
+                ApiSecrets = { new Secret("secret".Sha256()) },
+                UserClaims = {
+                    JwtClaimTypes.Email,
+                    JwtClaimTypes.EmailVerified,
+                    JwtClaimTypes.PhoneNumber,
+                    JwtClaimTypes.PhoneNumberVerified,
+                    JwtClaimTypes.GivenName,
+                    JwtClaimTypes.FamilyName,
+                    JwtClaimTypes.PreferredUserName,
+                    JwtClaimTypes.Role
+                },
+                Enabled = true,
+                Scopes = {
+                    "test-maker"
+                }
+            }
+        };
+
+        
+        public static IEnumerable<ApiScope> ApiScopes => new List<ApiScope>
+        {
+            new ApiScope("test-maker", "TestMaker"),
+        };
+
         public static IEnumerable<Client> Clients => new List<Client>
         {
             new Client
@@ -21,7 +82,7 @@ namespace TestMaker.UserService.Infrastructure.IdentityServer
                 {
                     new Secret("test-player".Sha256())
                 },
-                AllowedScopes = { "test-service", "event-service" },
+                AllowedScopes = { "test-maker" },
                 AllowOfflineAccess = true,
                 RefreshTokenUsage = TokenUsage.OneTimeOnly
             },
@@ -33,7 +94,7 @@ namespace TestMaker.UserService.Infrastructure.IdentityServer
                 {
                     new Secret("administrator".Sha256())
                 },
-                AllowedScopes = { "test-service", "event-service", "user-service" },
+                AllowedScopes = { "test-maker" },
                 AllowOfflineAccess = true,
                 RefreshTokenUsage = TokenUsage.OneTimeOnly
             }
