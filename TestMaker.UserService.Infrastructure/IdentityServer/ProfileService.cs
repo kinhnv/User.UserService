@@ -24,11 +24,11 @@ namespace TestMaker.UserService.Infrastructure.IdentityServer
             {
                 if (!string.IsNullOrEmpty(context?.Subject?.Identity?.Name))
                 {
-                    var user = (await _usersRepository.GetUserWithRolesByUserNameAsync(context.Subject.Identity.Name));
+                    var userWithRoles = (await _usersRepository.GetUserWithRolesByUserNameAsync(context.Subject.Identity.Name));
 
-                    if (user != null)
+                    if (userWithRoles != null)
                     {
-                        var claims = user.ToClaims();
+                        var claims = userWithRoles.ToClaims();
 
                         //set issued claims to return
                         context.IssuedClaims = claims.Where(x => context.RequestedClaimTypes.Contains(x.Type)).ToList();

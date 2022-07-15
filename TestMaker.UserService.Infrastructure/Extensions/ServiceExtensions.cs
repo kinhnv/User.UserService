@@ -48,6 +48,7 @@ namespace TestMaker.UserService.Infrastructure.Extensions
                 .AddDeveloperSigningCredential()
                 .AddInMemoryApiScopes(Config.ApiScopes)
                 .AddInMemoryClients(Config.Clients)
+                .AddInMemoryApiResources(Config.ApiResources)
                 .AddProfileService<ProfileService>();
 
             return service;
