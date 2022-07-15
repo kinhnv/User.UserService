@@ -21,6 +21,10 @@ namespace TestMaker.UserService.Domain.Models.User
 
         public string Password { get; set; }
 
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
         public List<Guid> RoleIds { get; set; }
     }
 }
