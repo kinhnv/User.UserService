@@ -121,7 +121,7 @@ namespace TestMaker.UserService.Infrastructure.Services
                 Data = quetsions.ToList(),
                 Page = getUserParams.Page,
                 Take = getUserParams.Take,
-                TotalPage = count
+                TotalRecord = count
             };
 
             return new ServiceResult<GetPaginationResult<UserForList>>(result);
