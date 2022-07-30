@@ -10,25 +10,18 @@ namespace TestMaker.UserService.Infrastructure.Entities
 {
     public class User : Entity
     {
-        public User()
-        {
-            UserName = string.Empty;
-            Password = string.Empty;
-            IsDeleted = false;
-        }
-
         [Required]
-        public Guid UserId { get; set; }
+        public Guid UserId { get; set; } = Guid.NewGuid();
 
         [Required]
         [StringLength(64)]
-        public string UserName { get; set; }
+        public string UserName { get; set; } = String.Empty;
 
         [Required]
-        public string Password { get; set; }
+        public string Password { get; set; } = String.Empty;
 
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = String.Empty;
 
-        public string LastName { get; set; }
+        public string LastName { get; set; } = String.Empty;
     }
 }

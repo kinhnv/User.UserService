@@ -13,6 +13,5 @@ namespace TestMaker.UserService.Domain.Models.User
         {
             IsDeleted = false;
         }
-        public bool IsDeleted { get; set; }
     }
 }
