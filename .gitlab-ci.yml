@@ -12,7 +12,6 @@ before_script:
   - eval "$(ssh-agent -s)"
   - cat ~/.ssh/id_rsa | ssh-add - > /dev/null
   - ssh-keyscan github.com >> ~/.ssh/known_hosts
-  - echo $GITHUB_URL
 
 build-user-service:
   stage: build
@@ -20,7 +19,6 @@ build-user-service:
     - master
   script:
     - docker-compose -f docker-compose-user-service.yml build
-    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     - docker-compose -f docker-compose-user-service.yml push
 
 build-identity-server:
@@ -29,7 +27,6 @@ build-identity-server:
     - master
   script:
     - docker-compose -f docker-compose-identity-server.yml build
-    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     - docker-compose -f docker-compose-identity-server.yml push
 
 update-github:

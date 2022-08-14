@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   test-service:
-    image: kinhnv1801/test-maker.identity-server:${VERSION}
+    image: 192.168.120.105:30000/test-maker.identity-server:${VERSION}
     build:
       context: .
       dockerfile: ./TestMaker.UserService.IdentityServer/Dockerfile  
