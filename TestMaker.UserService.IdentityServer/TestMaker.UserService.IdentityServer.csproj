@@ -9,14 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="IdentityServer4" Version="4.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
 
     <PackageReference Include="AspNetCore.Environment" Version="6.0.4" />
+    <PackageReference Include="Ddd.Helpers" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TestMaker.UserService.Infrastructure\TestMaker.UserService.Infrastructure.csproj" />
+    <ProjectReference Include="..\TestMaker.UserService.Domain\TestMaker.UserService.Domain.csproj" />
+    <ProjectReference Include="..\TestMaker.UserService.Infrastructure\TestMaker.UserService.Infrastructure.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>

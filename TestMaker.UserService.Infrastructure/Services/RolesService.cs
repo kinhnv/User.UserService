@@ -6,9 +6,9 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TestMaker.Common.Models;
-using TestMaker.RoleService.Domain.Services;
 using TestMaker.UserService.Domain.Models;
 using TestMaker.UserService.Domain.Models.Role;
+using TestMaker.UserService.Domain.Services;
 using TestMaker.UserService.Infrastructure.Entities;
 using TestMaker.UserService.Infrastructure.Repositories.Roles;
 

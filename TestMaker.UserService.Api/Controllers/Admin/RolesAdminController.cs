@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TestMaker.Common.Models;
-using TestMaker.RoleService.Domain.Services;
 using TestMaker.UserService.Domain.Models;
 using TestMaker.UserService.Domain.Models.Role;
+using TestMaker.UserService.Domain.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
