@@ -5,7 +5,7 @@ using TestMaker.Common.Models;
 using TestMaker.UserService.Domain.Models;
 using TestMaker.UserService.Domain.Models.Role;
 
-namespace TestMaker.RoleService.Domain.Services
+namespace TestMaker.UserService.Domain.Services
 {
     public interface IRolesService
     {

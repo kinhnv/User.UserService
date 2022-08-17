@@ -1,15 +1,16 @@
 using AspNetCore.Environment.Extensions;
 using Microsoft.EntityFrameworkCore;
 using TestMaker.Common.Extensions;
-using TestMaker.UserService.Infrastructure.Entities;
-using TestMaker.UserService.Infrastructure.Extensions;
+using Ddd.Helpers;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args)
     .AddACS();
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
+// Add Cors
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "AllowAll",
@@ -17,16 +18,24 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
-builder.Services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
-{
-    optionsBuilder.UseSqlServer(builder.Configuration["Mssql:ConnectionString"]);
+
+// Add Services and repositories
+builder.Services.AddCaching(builder.Configuration);
+
+// Add AddInfrastructure
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
+
+// Add Serilog
+builder.Host.UseSerilog((hostContext, services, configuration) => {
+    configuration.ReadFrom.Configuration(builder.Configuration);
 });
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddTransient();
 
 // Add Bearer Authentication
 builder.Services.AddBearerAuthentication(builder.Configuration);
+
+// Add ?
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -39,10 +48,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAll");
 
-app.UseHttpsRedirection();
-
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();
