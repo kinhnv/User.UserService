@@ -11,7 +11,7 @@ COPY TestMaker.UserService.IdentityServer TestMaker.UserService.IdentityServer
 COPY TestMaker.UserService.Domain TestMaker.UserService.Domain
 COPY TestMaker.UserService.Infrastructure TestMaker.UserService.Infrastructure
 WORKDIR "/src/TestMaker.UserService.IdentityServer"
-RUN sed -i "s/ReferenceOutputAssembly=\"false\"//g" ./TestMaker.EventService.Api.csproj
+RUN sed -i "s/ReferenceOutputAssembly=\"false\"//g" ./TestMaker.UserService.IdentityServer.csproj
 RUN dotnet restore "TestMaker.UserService.IdentityServer.csproj"
 RUN dotnet build "TestMaker.UserService.IdentityServer.csproj" -c Release -o /app/build
 
