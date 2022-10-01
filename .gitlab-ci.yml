@@ -38,7 +38,7 @@ build_user-service:
   only:
     - master
   image:
-    name: $REGISTRY/server.vault:v1.9.0-debug
+    name: $REGISTRY/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
   before_script:
     - sed -i "s/pre-build-params_registry/$REGISTRY/g" ./**/Dockerfile
@@ -61,7 +61,7 @@ build_identity-server:
   only:
     - master
   image:
-    name: $REGISTRY/server.vault:v1.9.0-debug
+    name: $REGISTRY/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
   before_script:
     - sed -i "s/pre-build-params_registry/$REGISTRY/g" ./**/Dockerfile
