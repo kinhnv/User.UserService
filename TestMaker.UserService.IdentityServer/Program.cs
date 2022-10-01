@@ -1,8 +1,5 @@
 using AspNetCore.Environment.Extensions;
 using Ddd.Helpers;
-using IdentityServer4.Services;
-using IdentityServer4.Validation;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args)
     .AddACS();

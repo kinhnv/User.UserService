@@ -4,70 +4,106 @@ variables:
 
 stages:
   - build
-  - update_github
   - test
-  - update_gitops
+  - deploy
 
-before_script:
-  - eval "$(ssh-agent -s)"
-  - cat ~/.ssh/id_rsa | ssh-add - > /dev/null
-  - ssh-keyscan github.com >> ~/.ssh/known_hosts
+.build_tags:
+  tags:
+    - "docker"
 
-build-user-service:
+.deploy_tags:
+  tags:
+    - "shell"
+
+.prepare_git:
+  before_script:
+    - eval "$(ssh-agent -s)"
+    - cat ~/.ssh/id_rsa | ssh-add - > /dev/null
+    - ssh-keyscan github.com >> ~/.ssh/known_hosts
+    - git config --global user.email "kinhnv1801@gmail.com"
+    - git config --global user.name "Nguyen Van Kinh"
+
+.push_github:
+  extends:
+    - .prepare_git
+  before_script:
+    - git remote set-url origin $GITHUB_URL 
+    - git push origin HEAD:master
+
+build_user-service:
   stage: build
+  extends:
+    - .build_tags
+    - .push_github
   only:
     - master
+  image:
+    name: $REGISTRY/server.vault:v1.9.0-debug
+    entrypoint: [""]
+  before_script:
+    - sed -i "s/pre-build-params_registry/$REGISTRY/g" ./**/Dockerfile
   script:
-    - docker-compose -f docker-compose-user-service.yml build
-    - docker-compose -f docker-compose-user-service.yml push
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/TestMaker.UserService.Api/Dockerfile"
+      --destination "$REGISTRY/test-maker.user-service:${VERSION}"
+      --skip-tls-verify
+      --cache=true
+      --cache-copy-layers=true
+      --snapshotMode=redo
+      --use-new-run
 
-build-identity-server:
+build_identity-server:
   stage: build
+  extends:
+    - .build_tags
+    - .push_github
   only:
     - master
+  image:
+    name: $REGISTRY/server.vault:v1.9.0-debug
+    entrypoint: [""]
+  before_script:
+    - sed -i "s/pre-build-params_registry/$REGISTRY/g" ./**/Dockerfile
   script:
-    - docker-compose -f docker-compose-identity-server.yml build
-    - docker-compose -f docker-compose-identity-server.yml push
-
-update-github:
-  stage: update_github
-  only:
-    - master
-  script:
-    - ssh git@github.com || true
-    - git remote remove origin && git remote add origin $GITHUB_URL
-    - git config --global --add safe.directory $(pwd)
-    - git fetch --unshallow $GITHUB_URL || true
-    - git push origin HEAD:master -f
-    - git config --global --unset safe.directory $(pwd) || true
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/TestMaker.UserService.IdentityServer/Dockerfile"
+      --destination "$REGISTRY/test-maker.identity-server:${VERSION}"
+      --skip-tls-verify
+      --cache=true
+      --cache-copy-layers=true
+      --snapshotMode=redo
+      --use-new-run
 
 test:
   stage: test
+  extends:
+    - .build_tags
   only:
     - master
-  needs:
-    - build-user-service
-    - build-identity-server
+  needs: 
+    - build_user-service
+    - build_identity-server
   script:
-    - echo "done"
+    - echo "test"
+    # - docker build -t test-business:latest -f TestMaker.TestService.UnitTests/Dockerfile .
+    # - docker run --rm -t test-business:latest dotnet test --logger:"console;verbosity=normal"
+    # - docker image rm test-business:latest
         
-update-gitops:
-  stage: update_gitops
+deploy:
+  stage: deploy
+  extends:
+    - .deploy_tags
+    - .prepare_git
   only:
     - master
   needs: [test]
   script:
-    - echo "update-gitops"
     - git clone $GITOPS_URL 
-    - cd GitOps
-    - git config --global --add safe.directory $(pwd)
-    - git checkout -b test-maker origin/test-maker
-    - sed -i "s/test-maker.user-service:[0-9]*/test-maker.user-service:$VERSION/g" ./setup/user-service.deployment.yml
-    - git add ./setup/user-service.deployment.yml
-    - sed -i "s/test-maker.identity-server:[0-9]*/test-maker.identity-server:$VERSION/g" ./setup/identity-server.deployment.yml
-    - git add ./setup/identity-server.deployment.yml
-    - git config --global user.email "kinhnv1801@gmail.com"
-    - git config --global user.name "Nguyen Van Kinh"
+    - cd gitops
+    - yq eval ".services.userService.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
+    - yq eval ".servers.identityServer.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
+    - git add ./test-maker/values.yaml
     - git commit -m "change to version $VERSION"
-    - git push origin test-maker
-    - git config --global --unset safe.directory $(pwd) || true
+    - git push
