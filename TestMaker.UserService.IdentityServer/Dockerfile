@@ -1,22 +1,19 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM pre-build-params_registry/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-core
+FROM pre-build-params_registry/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY . .
-
-FROM build-core AS build
-RUN dotnet restore "TestMaker.UserService.IdentityServer/TestMaker.UserService.IdentityServer.csproj"
+COPY TestMaker.UserService.IdentityServer TestMaker.UserService.IdentityServer
+COPY TestMaker.UserService.Domain TestMaker.UserService.Domain
+COPY TestMaker.UserService.Infrastructure TestMaker.UserService.Infrastructure
 WORKDIR "/src/TestMaker.UserService.IdentityServer"
+RUN sed -i "s/ReferenceOutputAssembly=\"false\"//g" ./TestMaker.EventService.Api.csproj
+RUN dotnet restore "TestMaker.UserService.IdentityServer.csproj"
 RUN dotnet build "TestMaker.UserService.IdentityServer.csproj" -c Release -o /app/build
-
-FROM build-core AS build-infrastructure
-WORKDIR "/src/TestMaker.UserService.Infrastructure"
-RUN dotnet build "TestMaker.UserService.Infrastructure.csproj" -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "TestMaker.UserService.IdentityServer.csproj" -c Release -o /app/publish
