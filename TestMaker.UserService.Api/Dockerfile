@@ -11,7 +11,7 @@ COPY TestMaker.UserService.Api TestMaker.UserService.Api
 COPY TestMaker.UserService.Domain TestMaker.UserService.Domain
 COPY TestMaker.UserService.Infrastructure TestMaker.UserService.Infrastructure
 WORKDIR "/src/TestMaker.UserService.Api"
-RUN sed -i "s/ReferenceOutputAssembly=\"false\"//g" ./TestMaker.EventService.Api.csproj
+RUN sed -i "s/ReferenceOutputAssembly=\"false\"//g" ./TestMaker.UserService.Api.csproj
 RUN dotnet restore "TestMaker.UserService.Api.csproj"
 RUN dotnet build "TestMaker.UserService.Api.csproj" -c Release -o /app/build
 
