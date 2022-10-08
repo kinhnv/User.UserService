@@ -101,8 +101,8 @@ deploy:
   script:
     - git clone $GITOPS_URL 
     - cd gitops
-    - yq eval ".services.userService.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
-    - yq eval ".servers.identityServer.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
+    - ~/yq eval ".services.userService.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
+    - ~/yq eval ".servers.identityServer.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
     - git add ./test-maker/values.yaml
     - git commit -m "change to version $VERSION"
     - git push
