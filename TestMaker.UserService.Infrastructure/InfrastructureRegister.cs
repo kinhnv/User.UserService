@@ -1,4 +1,5 @@
-﻿using Ddd.Helpers;
+﻿using AspNetCore.Environment.Extensions;
+using Ddd.Helpers;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Builder;
@@ -29,10 +30,14 @@ namespace TestMaker.UserService.Infrastructure
         {
             service.AddDbContext<ApplicationDbContext>(optionsBuilder =>
             {
-                optionsBuilder.UseSqlServer(configuration["Mssql:ConnectionString"]);
+                optionsBuilder.UseSqlServer(configuration.GetConfiguration("Mssql:ConnectionString"));
             });
 
-            service.AddMongoContext(configuration["Mongodb:ConnectionString"]);
+            service.AddMongoContext(new Common.Mongodb.MongoDbSettings
+            {
+                ConnectionString = configuration.GetConfiguration("Mongodb:ConnectionString"),
+                Database = configuration.GetConfiguration("Mongodb:Database")
+            });
 
             service.AddAutoMapperProfiles();
 
