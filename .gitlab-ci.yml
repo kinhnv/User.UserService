@@ -9,7 +9,7 @@ stages:
 
 .build_tags:
   tags:
-    - "docker"
+    - "shell"
 
 .deploy_tags:
   tags:
@@ -29,7 +29,6 @@ stages:
     - chmod 644 ~/.ssh/known_hosts
     - git config --global user.email "kinhnv1801@gmail.com"
     - git config --global user.name "Nguyen Van Kinh"
-    - 'which ~/yq || (wget -qO ~/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && chmod +x ~/yq)'
 
 build_user-service:
   stage: build
@@ -43,15 +42,8 @@ build_user-service:
   before_script:
     - sed -i "s/pre-build-params_registry/$REGISTRY/g" ./**/Dockerfile
   script:
-    - /kaniko/executor
-      --context "${CI_PROJECT_DIR}"
-      --dockerfile "${CI_PROJECT_DIR}/TestMaker.UserService.Api/Dockerfile"
-      --destination "$REGISTRY/test-maker.user-service:${VERSION}"
-      --skip-tls-verify
-      --cache=true
-      --cache-copy-layers=true
-      --snapshotMode=redo
-      --use-new-run
+    - docker build -t $REGISTRY/test-maker.user-service:${VERSION} ${CI_PROJECT_DIR} -f ${CI_PROJECT_DIR}/TestMaker.UserService.Api/Dockerfile
+    - docker push $REGISTRY/test-maker.user-service:${VERSION}
 
 build_identity-server:
   stage: build
@@ -65,15 +57,8 @@ build_identity-server:
   before_script:
     - sed -i "s/pre-build-params_registry/$REGISTRY/g" ./**/Dockerfile
   script:
-    - /kaniko/executor
-      --context "${CI_PROJECT_DIR}"
-      --dockerfile "${CI_PROJECT_DIR}/TestMaker.UserService.IdentityServer/Dockerfile"
-      --destination "$REGISTRY/test-maker.identity-server:${VERSION}"
-      --skip-tls-verify
-      --cache=true
-      --cache-copy-layers=true
-      --snapshotMode=redo
-      --use-new-run
+    - docker build -t $REGISTRY/test-maker.identity-server:${VERSION} ${CI_PROJECT_DIR} -f ${CI_PROJECT_DIR}/TestMaker.UserService.IdentityServer/Dockerfile
+    - docker push $REGISTRY/test-maker.identity-server:${VERSION}
 
 test:
   stage: test
@@ -101,8 +86,8 @@ deploy:
   script:
     - git clone $GITOPS_URL 
     - cd gitops
-    - ~/yq eval ".services.userService.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
-    - ~/yq eval ".servers.identityServer.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
+    - yq eval ".services.userService.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
+    - yq eval ".servers.identityServer.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
     - git add ./test-maker/values.yaml
     - git commit -m "change to version $VERSION"
     - git push
