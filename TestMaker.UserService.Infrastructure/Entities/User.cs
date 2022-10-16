@@ -8,7 +8,7 @@ using TestMaker.Common.Repository;
 
 namespace TestMaker.UserService.Infrastructure.Entities
 {
-    public class User : Entity
+    public class User : ObjectEntity
     {
         [Required]
         public Guid UserId { get; set; } = Guid.NewGuid();

@@ -8,7 +8,7 @@ using TestMaker.Common.Repository;
 
 namespace TestMaker.UserService.Infrastructure.Entities
 {
-    public class UserRole : Entity
+    public class UserRole : ObjectEntity
     {
         public UserRole()
         {

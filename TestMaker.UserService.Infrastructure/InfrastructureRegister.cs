@@ -33,7 +33,11 @@ namespace TestMaker.UserService.Infrastructure
                 optionsBuilder.UseSqlServer(configuration.GetConfiguration("Mssql:ConnectionString"));
             });
 
-            service.AddMongoContext(configuration.GetConfiguration("Mongodb:ConnectionString"));
+            service.AddMongoContext(new Common.Mongodb.MongoDbSettings
+            {
+                ConnectionString = configuration.GetConfiguration("Mongodb:ConnectionString"),
+                Database = configuration.GetConfiguration("Mongodb:Database")
+            });
 
             service.AddAutoMapperProfiles();
 
