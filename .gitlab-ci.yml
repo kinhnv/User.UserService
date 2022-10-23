@@ -44,6 +44,7 @@ build_user-service:
   script:
     - docker build -t $REGISTRY/test-maker.user-service:${VERSION} ${CI_PROJECT_DIR} -f ${CI_PROJECT_DIR}/TestMaker.UserService.Api/Dockerfile
     - docker push $REGISTRY/test-maker.user-service:${VERSION}
+    - docker image rm $REGISTRY/test-maker.user-service:${VERSION}
 
 build_identity-server:
   stage: build
@@ -59,6 +60,7 @@ build_identity-server:
   script:
     - docker build -t $REGISTRY/test-maker.identity-server:${VERSION} ${CI_PROJECT_DIR} -f ${CI_PROJECT_DIR}/TestMaker.UserService.IdentityServer/Dockerfile
     - docker push $REGISTRY/test-maker.identity-server:${VERSION}
+    - docker image rm $REGISTRY/test-maker.identity-server:${VERSION}
 
 test:
   stage: test
