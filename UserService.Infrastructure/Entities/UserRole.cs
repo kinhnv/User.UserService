@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using i3rothers.Infrastructure.Repository;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestMaker.Common.Repository;
 
 namespace UserService.Infrastructure.Entities
 {
-    public class UserRole : ObjectEntity
+    public class UserRole : Entity
     {
         public UserRole()
         {

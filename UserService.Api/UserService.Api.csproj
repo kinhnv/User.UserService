@@ -24,12 +24,14 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.6" />
 
     <PackageReference Include="AspNetCore.Environment" Version="6.0.6" />
-    <PackageReference Include="Ddd.Helpers" Version="6.0.1" />
+    <PackageReference Include="i3rothers.Infrastructure" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\UserService.Domain\UserService.Domain.csproj" />
-    <ProjectReference Include="..\UserService.Infrastructure\UserService.Infrastructure.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\UserService.Infrastructure\UserService.Infrastructure.csproj" >
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

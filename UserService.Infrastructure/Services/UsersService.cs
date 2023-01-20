@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using i3rothers.Domain.Models;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using TestMaker.Common.Models;
 using UserService.Domain.Models.User;
 using UserService.Domain.Services;
 using UserService.Infrastructure.Entities;

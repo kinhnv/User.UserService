@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using i3rothers.Domain.Extensions;
+using i3rothers.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TestMaker.Common.Extensions;
-using TestMaker.Common.Models;
 using UserService.Domain.Models.User;
 using UserService.Domain.Services;
 

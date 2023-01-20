@@ -1,5 +1,7 @@
 ﻿using AspNetCore.Environment.Extensions;
-using Ddd.Helpers;
+using i3rothers.Domain.InfrastructureRegister;
+using i3rothers.Infrastructure.Extensions;
+using i3rothers.Infrastructure.Mongodb;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Builder;
@@ -7,12 +9,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestMaker.Common.Extensions;
 using UserService.Domain.Services;
 using UserService.Infrastructure.Entities;
 using UserService.Infrastructure.Extensions;
@@ -28,12 +24,15 @@ namespace UserService.Infrastructure
     {
         public void AddInfrastructure(IServiceCollection service, ConfigurationManager configuration, IWebHostEnvironment environment)
         {
+            // Add Services and repositories
+            service.AddCaching(configuration);
+
             service.AddDbContext<ApplicationDbContext>(optionsBuilder =>
             {
                 optionsBuilder.UseSqlServer(configuration.GetConfiguration("Mssql:ConnectionString"));
             });
 
-            service.AddMongoContext(new Common.Mongodb.MongoDbSettings
+            service.AddMongoContext(new MongoDbSettings
             {
                 ConnectionString = configuration.GetConfiguration("Mongodb:ConnectionString"),
                 Database = configuration.GetConfiguration("Mongodb:Database")

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TestMaker.Common.Models;
+﻿using i3rothers.Domain.Models;
+using Microsoft.AspNetCore.Mvc;
 using UserService.Domain.Models.User;
 using UserService.Domain.Services;
 

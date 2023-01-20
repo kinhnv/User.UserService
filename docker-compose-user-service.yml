@@ -1,7 +1,0 @@
-version: '3.3'
-services:
-  test-service:
-    image: 192.168.120.108:30000/test-maker.user-service:${VERSION}
-    build:
-      context: .
-      dockerfile: ./UserService.Api/Dockerfile  

@@ -1,7 +1,5 @@
 using AspNetCore.Environment.Extensions;
-using Microsoft.EntityFrameworkCore;
-using TestMaker.Common.Extensions;
-using Ddd.Helpers;
+using i3rothers.Domain.Extensions;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
@@ -20,9 +18,6 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
-
-// Add Services and repositories
-builder.Services.AddCaching(builder.Configuration);
 
 // Add AddInfrastructure
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
