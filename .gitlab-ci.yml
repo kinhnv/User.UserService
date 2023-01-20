@@ -35,26 +35,25 @@ build:
   extends:
     - .build_tags
   only:
-    - master
+    - main
   before_script:
     - sed -i "s/pre-build-params_registry/$REGISTRY/g" ./**/Dockerfile
     - sed -i "s/pre-build-params_github-source-username/$GITHUB_SOURCE_USERNAME/g" ./**/Dockerfile
     - sed -i "s/pre-build-params_github-source-token/$GITHUB_SOURCE_TOKEN/g" ./**/Dockerfile
     - sed -i "s,pre-build-params_github-source-url,$GITHUB_SOURCE_URL,g" ./**/Dockerfile
   script:
-    - docker build -t $REGISTRY/test-maker.user-service:${VERSION} ${CI_PROJECT_DIR} -f ${CI_PROJECT_DIR}/UserService.Api/Dockerfile
-    - docker push $REGISTRY/test-maker.user-service:${VERSION}
-    - docker image rm $REGISTRY/test-maker.user-service:${VERSION}
+    - docker build -t $REGISTRY/user.user-service:${VERSION} ${CI_PROJECT_DIR} -f ${CI_PROJECT_DIR}/UserService.Api/Dockerfile
+    - docker push $REGISTRY/user.user-service:${VERSION}
+    - docker image rm $REGISTRY/user.user-service:${VERSION}
 
 test:
   stage: test
   extends:
     - .build_tags
   only:
-    - master
+    - main
   needs: 
-    - build_user-service
-    - build_identity-server
+    - build
   script:
     - echo "test"
     # - docker build -t test-business:latest -f TestMaker.TestService.UnitTests/Dockerfile .
@@ -67,12 +66,12 @@ deploy:
     - .deploy_tags
     - .prepare_ssh
   only:
-    - master
+    - main
   needs: [test]
   script:
     - git clone $GITOPS_URL 
     - cd gitops
-    - yq eval ".services.userService.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
-    - git add ./test-maker/values.yaml
+    - yq eval ".services.userService.tag = \"${VERSION}\"" -i ./user/values.yaml
+    - git add ./user/values.yaml
     - git commit -m "change to version $VERSION"
     - git push
