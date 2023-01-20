@@ -11,7 +11,7 @@ COPY UserService.Api UserService.Api
 COPY UserService.Domain UserService.Domain
 COPY UserService.Infrastructure UserService.Infrastructure
 WORKDIR "/src/UserService.Api"
-RUN sed -i "s,<ReferenceOutputAssembly>False</ReferenceOutputAssembly>,<ReferenceOutputAssembly>True</ReferenceOutputAssembly>,g" ./UesrService.Api.csproj
+RUN sed -i "s,<ReferenceOutputAssembly>False</ReferenceOutputAssembly>,<ReferenceOutputAssembly>True</ReferenceOutputAssembly>,g" ./UserService.Api.csproj
 RUN dotnet nuget add source --username pre-build-params_github-source-username --password pre-build-params_github-source-token --store-password-in-clear-text --name github "pre-build-params_github-source-url"
 RUN dotnet restore "UserService.Api.csproj"
 RUN dotnet build "UserService.Api.csproj" -c Release -o /app/build
