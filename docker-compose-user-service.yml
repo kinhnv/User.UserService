@@ -4,4 +4,4 @@ services:
     image: 192.168.120.108:30000/test-maker.user-service:${VERSION}
     build:
       context: .
-      dockerfile: ./TestMaker.UserService.Api/Dockerfile  
+      dockerfile: ./UserService.Api/Dockerfile  

@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/TestMaker.UserService.Api/TestMaker.UserService.Api.csproj",
+                "${workspaceFolder}/UserService.Api/UserService.Api.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/TestMaker.UserService.Api/TestMaker.UserService.Api.csproj",
+                "${workspaceFolder}/UserService.Api/UserService.Api.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/TestMaker.UserService.Api/TestMaker.UserService.Api.csproj"
+                "${workspaceFolder}/UserService.Api/UserService.Api.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

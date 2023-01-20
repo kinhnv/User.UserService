@@ -42,7 +42,7 @@ build_user-service:
   before_script:
     - sed -i "s/pre-build-params_registry/$REGISTRY/g" ./**/Dockerfile
   script:
-    - docker build -t $REGISTRY/test-maker.user-service:${VERSION} ${CI_PROJECT_DIR} -f ${CI_PROJECT_DIR}/TestMaker.UserService.Api/Dockerfile
+    - docker build -t $REGISTRY/test-maker.user-service:${VERSION} ${CI_PROJECT_DIR} -f ${CI_PROJECT_DIR}/UserService.Api/Dockerfile
     - docker push $REGISTRY/test-maker.user-service:${VERSION}
     - docker image rm $REGISTRY/test-maker.user-service:${VERSION}
 
@@ -58,7 +58,7 @@ build_identity-server:
   before_script:
     - sed -i "s/pre-build-params_registry/$REGISTRY/g" ./**/Dockerfile
   script:
-    - docker build -t $REGISTRY/test-maker.identity-server:${VERSION} ${CI_PROJECT_DIR} -f ${CI_PROJECT_DIR}/TestMaker.UserService.IdentityServer/Dockerfile
+    - docker build -t $REGISTRY/test-maker.identity-server:${VERSION} ${CI_PROJECT_DIR} -f ${CI_PROJECT_DIR}/UserService.IdentityServer/Dockerfile
     - docker push $REGISTRY/test-maker.identity-server:${VERSION}
     - docker image rm $REGISTRY/test-maker.identity-server:${VERSION}
 
