@@ -27,16 +27,25 @@ namespace UserService.Infrastructure
             // Add Services and repositories
             service.AddCaching(configuration);
 
-            service.AddDbContext<ApplicationDbContext>(optionsBuilder =>
-            {
-                optionsBuilder.UseSqlServer(configuration.GetConfiguration("Mssql:ConnectionString"));
-            });
+            var connectionString = configuration.GetConfiguration("Mssql:ConnectionString");
 
-            service.AddMongoContext(new MongoDbSettings
+            if (!string.IsNullOrEmpty(connectionString))
             {
-                ConnectionString = configuration.GetConfiguration("Mongodb:ConnectionString"),
-                Database = configuration.GetConfiguration("Mongodb:Database")
-            });
+                service.AddDbContext<ApplicationDbContext>(optionsBuilder =>
+                {
+                    optionsBuilder.UseSqlServer(connectionString);
+                });
+            }
+
+
+            if (!string.IsNullOrEmpty(configuration.GetConfiguration("Mongodb:ConnectionString")))
+            {
+                service.AddMongoContext(new MongoDbSettings
+                {
+                    ConnectionString = configuration.GetConfiguration("Mongodb:ConnectionString"),
+                    Database = configuration.GetConfiguration("Mongodb:Database") ?? "DefaultDatabase"
+                });
+            }
 
             service.AddAutoMapperProfiles();
 

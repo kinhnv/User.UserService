@@ -13,11 +13,11 @@ namespace UserService.Infrastructure.Entities
         {
         }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<User>? Users { get; set; }
 
-        public DbSet<Role> Roles { get; set; }
+        public DbSet<Role>? Roles { get; set; }
 
-        public DbSet<UserRole> RoleUsers { get; set; }
+        public DbSet<UserRole>? RoleUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
