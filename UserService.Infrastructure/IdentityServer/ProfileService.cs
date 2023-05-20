@@ -5,16 +5,19 @@ using System.Security.Claims;
 using UserService.Infrastructure.Entities;
 using UserService.Infrastructure.Extensions;
 using UserService.Infrastructure.Repositories.Users;
+using Microsoft.Extensions.Logging;
 
 namespace UserService.Infrastructure.IdentityServer
 {
     public class ProfileService : IProfileService
     {
         private readonly IUsersRepository _usersRepository;
+        private readonly ILogger<IProfileService> _logger;
 
-        public ProfileService(IUsersRepository usersRepository)
+        public ProfileService(IUsersRepository usersRepository, ILogger<IProfileService> logger)
         {
             _usersRepository = usersRepository;
+            _logger = logger;
         }
 
         //Get user profile date in terms of claims when calling /connect/userinfo
@@ -54,7 +57,7 @@ namespace UserService.Infrastructure.IdentityServer
             }
             catch (Exception exception)
             {
-                //log your error
+                _logger.LogError(exception.Message, exception);
             }
         }
 
@@ -82,7 +85,7 @@ namespace UserService.Infrastructure.IdentityServer
             }
             catch (Exception exception)
             {
-                //handle error logging
+                _logger.LogError(exception.Message, exception);
             }
         }
     }
