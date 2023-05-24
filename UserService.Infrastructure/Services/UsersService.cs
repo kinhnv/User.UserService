@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using i3rothers.Domain.Extensions;
 using i3rothers.Domain.Models;
+using i3rothers.Infrastructure.Repository;
 using System.Linq.Expressions;
 using UserService.Domain.Models.User;
 using UserService.Domain.Services;
@@ -14,23 +16,27 @@ namespace UserService.Infrastructure.Services
     {
         private readonly IUsersRepository _usersRepository;
         private readonly IRoleUsersRepository _roleUsersRepository;
-        private readonly IRolesRepository _rolesRepository;
         private readonly IMapper _mapper;
 
         public UsersService(
             IUsersRepository usersRepository,
             IRoleUsersRepository roleUsersRepository,
-            IRolesRepository rolesRepository,
             IMapper mapper)
         {
             _usersRepository = usersRepository;
             _roleUsersRepository = roleUsersRepository;
-            _rolesRepository = rolesRepository;
             _mapper = mapper;
         }
 
         public async Task<ServiceResult<UserForDetails>> CreateUserAsync(UserForCreating user)
         {
+            var errorMessages = user.Validate();
+
+            if (errorMessages.Count > 0)
+            {
+                return new ServiceFailedResult<UserForDetails>(errorMessages);
+            }
+
             var entity = _mapper.Map<User>(user);
 
             await _usersRepository.CreateAsync(entity);
@@ -47,25 +53,39 @@ namespace UserService.Infrastructure.Services
 
             await _roleUsersRepository.CreateAsync(roleUsers);
 
-            return await GetUserAsync(entity.UserId);
+            return await GetUserAsync(new GetUserParams { UserId = entity.UserId });
         }
 
-        public async Task<ServiceResult> DeleteUserAsync(Guid userId)
+        public async Task<ServiceResult> DeleteUserAsync(DeleteUserParams @params)
         {
-            var user = await _usersRepository.GetAsync(userId);
+            var errorMessages = @params.Validate();
+
+            if (errorMessages.Count > 0)
+            {
+                return new ServiceFailedResult(errorMessages);
+            }
+
+            var user = (await _usersRepository.GetAsync(x => x.UserId == @params.UserId)).SingleOrDefault();
 
             if (user == null)
-                return new ServiceNotFoundResult<UserForDetails>(userId);
+                return new ServiceNotFoundResult<User>(@params.UserId);
 
-            await _rolesRepository.DeleteAsync(userId);
-            await _roleUsersRepository.RemoveRoleUserByUserIdAsync(userId);
+            await _usersRepository.DeleteAsync(x => x.UserId == @params.UserId);
+            await _roleUsersRepository.DeleteAsync(x => x.UserId == @params.UserId);
 
-            return new ServiceResult();
+            return new ServiceSuccessfulResult();
         }
 
         public async Task<ServiceResult<UserForDetails>> EditUserAsync(UserForEditing user)
         {
-            var count = await _usersRepository.CountAsync(x => x.UserId == user.UserId && x.IsDeleted == false);
+            var errorMessages = user.Validate();
+
+            if (errorMessages.Count > 0)
+            {
+                return new ServiceFailedResult<UserForDetails>(errorMessages);
+            }
+
+            var count = await _usersRepository.CountAsync(x => x.UserId == user.UserId);
             if (count == 0)
             {
                 return new ServiceNotFoundResult<UserForDetails>(user.UserId);
@@ -84,33 +104,53 @@ namespace UserService.Infrastructure.Services
             });
             await _roleUsersRepository.CreateAsync(roleUsers);
 
-            return await GetUserAsync(user.UserId);
+            return await GetUserAsync(new GetUserParams { UserId = user.UserId });
         }
 
-        public async Task<ServiceResult<UserForDetails>> GetUserAsync(Guid userId)
+        public async Task<ServiceResult<UserForDetails>> GetUserAsync(GetUserParams @params)
         {
-            var user = await _usersRepository.GetAsync(userId);
+            var errorMessages = @params.Validate();
+
+            if (errorMessages.Count > 0)
+            {
+                return new ServiceFailedResult<UserForDetails>(errorMessages);
+            }
+
+            var user = (await _usersRepository.GetAsync(x => x.UserId == @params.UserId)).SingleOrDefault();
 
             if (user == null)
-                return new ServiceNotFoundResult<UserForDetails>(userId);
+                return new ServiceNotFoundResult<UserForDetails>(@params.UserId);
 
             var userForDetails = _mapper.Map<UserForDetails>(user);
 
-            var roleUsers = await _roleUsersRepository.GetAsync(x => x.UserId == user.UserId && x.IsDeleted == false);
+            var roleUsers = await _roleUsersRepository.GetAsync(x => x.UserId == user.UserId);
             var roleIds = roleUsers.Select(x => x.RoleId).ToList();
 
             userForDetails.RoleIds = roleIds;
 
-            return new ServiceResult<UserForDetails>(userForDetails);
+            return new ServiceSuccessfulResult<UserForDetails>(userForDetails);
         }
 
-        public async Task<ServiceResult<GetPaginationResult<UserForList>>> GetUsersAsync(GetUserParams getUserParams)
+        public async Task<ServiceResult<GetPaginationResult<UserForList>>> GetUsersAsync(GetUsersParams getUserParams)
         {
-            Expression<Func<User, bool>> predicate = x => x.IsDeleted == getUserParams.IsDeleted;
+            var errorMessages = getUserParams.Validate();
 
-            var quetsions = (await _usersRepository.GetAsync(predicate, getUserParams.Skip, getUserParams.Take))
-                .Select(section => _mapper.Map<UserForList>(section));
-            var count = await _usersRepository.CountAsync(predicate);
+            if (errorMessages.Count > 0)
+            {
+                return new ServiceFailedResult<GetPaginationResult<UserForList>>(errorMessages);
+            }
+
+            var quetsions = (await _usersRepository.GetAsync(new GetParams<User>
+            {
+                Skip = getUserParams.Skip,
+                Take = getUserParams.Take
+            })).Select(section => _mapper.Map<UserForList>(section));
+
+            var count = await _usersRepository.CountAsync(new GetParams<User>
+            {
+                Skip = getUserParams.Skip,
+                Take = getUserParams.Take
+            });
             var result = new GetPaginationResult<UserForList>
             {
                 Data = quetsions.ToList(),
@@ -119,7 +159,7 @@ namespace UserService.Infrastructure.Services
                 TotalRecord = count
             };
 
-            return new ServiceResult<GetPaginationResult<UserForList>>(result);
+            return new ServiceSuccessfulResult<GetPaginationResult<UserForList>>(result);
         }
     }
 }

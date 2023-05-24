@@ -8,13 +8,13 @@ namespace UserService.Domain.Services
     {
         Task<ServiceResult<GetPaginationResult<RoleForList>>> GetRolesAsync(GetRolesParams getRolesParams);
 
-        Task<ServiceResult<RoleForDetails>> GetRoleAsync(Guid roleId);
+        Task<ServiceResult<RoleForDetails>> GetRoleAsync(GetRoleParams @params);
 
         Task<ServiceResult<RoleForDetails>> CreateRoleAsync(RoleForCreating role);
 
         Task<ServiceResult<RoleForDetails>> EditRoleAsync(RoleForEditing role);
 
-        Task<ServiceResult> DeleteRoleAsync(Guid roleId);
+        Task<ServiceResult> DeleteRoleAsync(DeleteRoleParams roleId);
 
         Task<ServiceResult<IEnumerable<SelectOption>>> GetRolesAsSelectOptionsAsync();
     }

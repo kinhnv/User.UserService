@@ -23,7 +23,7 @@ namespace UserService.Api.Controllers.Admin
         public async Task<ActionResult> GetRoles([FromQuery] GetRolesParams request)
         {
             var result = await _rolesService.GetRolesAsync(request);
-            return Ok(new ApiResult<GetPaginationResult<RoleForList>>(result));
+            return Ok(result.ToApiResult());
         }
 
         [HttpGet]
@@ -31,21 +31,21 @@ namespace UserService.Api.Controllers.Admin
         public async Task<ActionResult> GetSelectOptions()
         {
             var result = await _rolesService.GetRolesAsSelectOptionsAsync();
-            return Ok(new ApiResult<IEnumerable<SelectOption>>(result));
+            return Ok(result.ToApiResult());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetRole(Guid id)
         {
-            var result = await _rolesService.GetRoleAsync(id);
-            return Ok(new ApiResult<RoleForDetails>(result));
+            var result = await _rolesService.GetRoleAsync(new GetRoleParams { RoleId = id });
+            return Ok(result.ToApiResult());
         }
 
         [HttpPost]
         public async Task<ActionResult> PostRole([FromBody] RoleForCreating role)
         {
             var result = await _rolesService.CreateRoleAsync(role);
-            return Ok(new ApiResult<RoleForDetails>(result));
+            return Ok(result.ToApiResult());
         }
 
         [HttpPut("{id}")]
@@ -53,18 +53,18 @@ namespace UserService.Api.Controllers.Admin
         {
             if (id != role.RoleId)
             {
-                return Ok(new ApiResult());
+                return Ok(new ServiceFailedResult().ToApiResult());
             }
 
             var result = await _rolesService.EditRoleAsync(role);
-            return Ok(new ApiResult<RoleForDetails>(result));
+            return Ok(result.ToApiResult());
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRole(Guid id)
         {
-            var result = await _rolesService.DeleteRoleAsync(id);
-            return Ok(new ApiResult(result));
+            var result = await _rolesService.DeleteRoleAsync(new DeleteRoleParams { RoleId = id });
+            return Ok(result.ToApiResult());
         }
     }
 }

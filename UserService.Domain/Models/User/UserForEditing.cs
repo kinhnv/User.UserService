@@ -1,4 +1,5 @@
-﻿using System;
+﻿using i3rothers.Domain.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,23 +10,16 @@ namespace UserService.Domain.Models.User
 {
     public class UserForEditing
     {
-        public UserForEditing()
-        {
-            UserName = String.Empty;
-            Password = string.Empty;
-            RoleIds = new List<Guid>();
-        }
-        [Required]
+        [ValidationGuidProperty(IsRequired = true)]
         public Guid UserId { get; set; }
 
-        [Required]
-        [StringLength(64)]
-        public string UserName { get; set; }
+        [ValidationStringProperty(IsRequired = true, MaxLength = 64)]
+        public string UserName { get; set; } = null!;
 
-        [Required]
-        [StringLength(64)]
-        public string Password { get; set; }
+        [ValidationStringProperty(IsRequired = true, MaxLength = 64)]
+        public string Password { get; set; } = null!;
 
-        public List<Guid> RoleIds { get; set; }
+        [ValidationListProperty(IsRequired = true)]
+        public List<Guid> RoleIds { get; set; } = null!;
     }
 }
