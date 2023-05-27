@@ -42,6 +42,7 @@ namespace UserService.Infrastructure.Services
             await _usersRepository.CreateAsync(entity);
 
             var roleUsers = new List<UserRole>();
+
             user.RoleIds.ForEach(roleId =>
             {
                 roleUsers.Add(new UserRole
@@ -92,16 +93,13 @@ namespace UserService.Infrastructure.Services
             }
 
             await _usersRepository.UpdateAsync(_mapper.Map<User>(user));
-            await _roleUsersRepository.RemoveRoleUserByUserIdAsync(user.UserId);
-            var roleUsers = new List<UserRole>();
-            user.RoleIds.ForEach(roleId =>
+            await _roleUsersRepository.DeleteAsync(ur => ur.UserId == user.UserId);
+
+            var roleUsers = user.RoleIds.Select(roleId => new UserRole
             {
-                roleUsers.Add(new UserRole
-                {
-                    RoleId = roleId,
-                    UserId = user.UserId
-                });
-            });
+                RoleId = roleId,
+                UserId = user.UserId
+            }).ToList();
             await _roleUsersRepository.CreateAsync(roleUsers);
 
             return await GetUserAsync(new GetUserParams { UserId = user.UserId });
@@ -133,27 +131,16 @@ namespace UserService.Infrastructure.Services
 
         public async Task<ServiceResult<GetPaginationResult<UserForList>>> GetUsersAsync(GetUsersParams getUserParams)
         {
-            var errorMessages = getUserParams.Validate();
-
-            if (errorMessages.Count > 0)
-            {
-                return new ServiceFailedResult<GetPaginationResult<UserForList>>(errorMessages);
-            }
-
-            var quetsions = (await _usersRepository.GetAsync(new GetParams<User>
+            var users = (await _usersRepository.GetAsync(new GetParams<User>
             {
                 Skip = getUserParams.Skip,
                 Take = getUserParams.Take
             })).Select(section => _mapper.Map<UserForList>(section));
 
-            var count = await _usersRepository.CountAsync(new GetParams<User>
-            {
-                Skip = getUserParams.Skip,
-                Take = getUserParams.Take
-            });
+            var count = await _usersRepository.CountAsync(new GetParams<User>());
             var result = new GetPaginationResult<UserForList>
             {
-                Data = quetsions.ToList(),
+                Data = users.ToList(),
                 Page = getUserParams.Page,
                 Take = getUserParams.Take,
                 TotalRecord = count

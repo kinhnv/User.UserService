@@ -9,12 +9,8 @@ namespace UserService.Domain.Models.Role
 {
     public class RoleForList
     {
-        public RoleForList()
-        {
-            Name = String.Empty;
-        }
         public Guid RoleId { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

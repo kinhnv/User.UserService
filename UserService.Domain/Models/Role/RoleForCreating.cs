@@ -1,4 +1,6 @@
-﻿using System;
+﻿using i3rothers.Domain.Attributes;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,12 +11,7 @@ namespace UserService.Domain.Models.Role
 {
     public class RoleForCreating
     {
-        public RoleForCreating()
-        {
-            Name = String.Empty;
-        }
-        [Required]
-        [StringLength(64)]
-        public string Name { get; set; }
+        [ValidationStringProperty(IsRequired = true, MaxLength = 64)]
+        public string Name { get; set; } = null!;
     }
 }

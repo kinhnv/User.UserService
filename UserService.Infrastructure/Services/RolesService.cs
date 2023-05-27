@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using i3rothers.Domain.Extensions;
 using i3rothers.Domain.Models;
+using i3rothers.Infrastructure.Repository;
 using System.Linq.Expressions;
 using UserService.Domain.Models;
 using UserService.Domain.Models.Role;
@@ -52,7 +53,7 @@ namespace UserService.Infrastructure.Services
                 return new ServiceNotFoundResult<Role>(@params.RoleId);
             }
 
-            await EditRoleAsync(_mapper.Map<RoleForEditing>(role));
+            await _rolesRepository.DeleteAsync(x => x.RoleId == @params.RoleId);
             return new ServiceSuccessfulResult();
         }
 
@@ -96,24 +97,17 @@ namespace UserService.Infrastructure.Services
 
         public async Task<ServiceResult<GetPaginationResult<RoleForList>>> GetRolesAsync(GetRolesParams getRolesParams)
         {
-            var errorMessages = getRolesParams.Validate();
-
-            if (errorMessages.Count > 0)
-            {
-                return new ServiceFailedResult<GetPaginationResult<RoleForList>>(errorMessages);
-            }
-
-            var quetsions = (await _rolesRepository.GetAsync(new i3rothers.Infrastructure.Repository.GetParams<Role>
+            var roles = (await _rolesRepository.GetAsync(new GetParams<Role>
             {
                 Skip = getRolesParams.Skip,
                 Take = getRolesParams.Take
             })).Select(section => _mapper.Map<RoleForList>(section));
 
-            var count = await _rolesRepository.CountAsync(new i3rothers.Infrastructure.Repository.GetParams<Role>());
+            var count = await _rolesRepository.CountAsync(new GetParams<Role>());
 
             var result = new GetPaginationResult<RoleForList>
             {
-                Data = quetsions.ToList(),
+                Data = roles.ToList(),
                 Page = getRolesParams.Page,
                 Take = getRolesParams.Take,
                 TotalRecord = count
