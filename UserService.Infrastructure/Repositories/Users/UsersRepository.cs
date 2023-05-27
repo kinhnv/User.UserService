@@ -1,4 +1,7 @@
 using i3rothers.Infrastructure.Repository;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using UserService.Infrastructure.Entities;
 
 namespace UserService.Infrastructure.Repositories.Users
@@ -9,7 +12,7 @@ namespace UserService.Infrastructure.Repositories.Users
         {
         }
 
-        public async Task<UserWithRoles?> GetUserWithRolesByUserNameAsync(string userName)
+        public async Task<UserWithRoles> GetUserWithRolesByUserNameAsync(string userName)
         {
             var usersAsQueryable = _dbContext.Set<User>().Where(x => x.UserName == userName);
             var rolesAsQueryable = _dbContext.Set<Role>();
@@ -32,7 +35,7 @@ namespace UserService.Infrastructure.Repositories.Users
             return await Task.FromResult(result);
         }
 
-        public async Task<UserWithRoles?> GetUserWithRolesByUserIdAsync(Guid userId)
+        public async Task<UserWithRoles> GetUserWithRolesByUserIdAsync(Guid userId)
         {
             var usersAsQueryable = _dbContext.Set<User>().Where(x => x.UserId == userId);
             var rolesAsQueryable = _dbContext.Set<Role>();

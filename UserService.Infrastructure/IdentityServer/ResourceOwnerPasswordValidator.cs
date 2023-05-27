@@ -2,6 +2,7 @@
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using UserService.Infrastructure.Entities;
 using UserService.Infrastructure.Extensions;
 using UserService.Infrastructure.Repositories.Users;

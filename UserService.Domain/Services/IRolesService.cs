@@ -1,4 +1,6 @@
 ﻿using i3rothers.Domain.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UserService.Domain.Models;
 using UserService.Domain.Models.Role;
 

@@ -1,5 +1,6 @@
 ﻿using i3rothers.Infrastructure.Entities.Attributes;
 using i3rothers.Infrastructure.Repository;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace UserService.Infrastructure.Entities

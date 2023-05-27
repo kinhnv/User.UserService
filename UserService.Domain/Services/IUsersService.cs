@@ -1,4 +1,5 @@
 ﻿using i3rothers.Domain.Models;
+using System.Threading.Tasks;
 using UserService.Domain.Models.User;
 
 namespace UserService.Domain.Services

@@ -6,6 +6,9 @@ using UserService.Infrastructure.Entities;
 using UserService.Infrastructure.Extensions;
 using UserService.Infrastructure.Repositories.Users;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using System.Linq;
+using System;
 
 namespace UserService.Infrastructure.IdentityServer
 {

@@ -2,7 +2,10 @@
 using i3rothers.Domain.Extensions;
 using i3rothers.Domain.Models;
 using i3rothers.Infrastructure.Repository;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using UserService.Domain.Models.User;
 using UserService.Domain.Services;
 using UserService.Infrastructure.Entities;

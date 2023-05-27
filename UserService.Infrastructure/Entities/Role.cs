@@ -2,6 +2,7 @@
 using i3rothers.Infrastructure.Entities;
 using System.ComponentModel.DataAnnotations;
 using i3rothers.Infrastructure.Entities.Attributes;
+using System;
 
 namespace UserService.Infrastructure.Entities
 {
