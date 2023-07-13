@@ -59,14 +59,19 @@ deploy:
     - main
   needs: [test]
   script:
-    - git clone $GITOPS_URL 
-    - cd gitops
-    - yq eval ".services.userService.tag = \"${VERSION}\"" -i ./user/values.yaml
-    - git add ./user/values.yaml
-    - git commit -m "change to version $VERSION"
-    - git push
+    - git clone $GITOPS_URL && cd gitops
+    - yq eval ".services.eventService.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
+    - git add ./test-maker/values.yaml || true
+    - git commit -m "change to version $VERSION" || true
+    - git push || true
     - cd .. && rm -rf gitops
     - git remote set-url origin $GITHUB_URL
-    - git checkout -b main || true
-    - git filter-branch -- --all || true
-    - git push origin main
+    - >
+      if [ `git branch --list main` ]; then
+        echo "push to existing branch"; 
+        git push -u origin HEAD:main;
+      else
+        echo "create new branch";
+        git checkout -b main; 
+        git push -u origin main;
+      fi
