@@ -60,10 +60,10 @@ deploy:
   needs: [test]
   script:
     - git clone $GITOPS_URL && cd gitops
-    - yq eval ".services.eventService.tag = \"${VERSION}\"" -i ./test-maker/values.yaml
-    - git add ./test-maker/values.yaml || true
-    - git commit -m "change to version $VERSION" || true
-    - git push || true
+    - yq eval ".services.eventService.tag = \"${VERSION}\"" -i ./user/values.yaml
+    - git add ./user/values.yaml
+    - git commit -m "change to version $VERSION"
+    - git push
     - cd .. && rm -rf gitops
     - git remote set-url origin $GITHUB_URL
     - >
