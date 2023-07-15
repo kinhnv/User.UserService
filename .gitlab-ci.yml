@@ -60,7 +60,7 @@ deploy:
   needs: [test]
   script:
     - git clone $GITOPS_URL && cd gitops
-    - yq eval ".services.eventService.tag = \"${VERSION}\"" -i ./user/values.yaml
+    - yq eval ".services.userService.tag = \"${VERSION}\"" -i ./user/values.yaml
     - git add ./user/values.yaml
     - git commit -m "change to version $VERSION"
     - git push
