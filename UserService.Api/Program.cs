@@ -1,5 +1,7 @@
 using AspNetCore.Environment.Extensions;
 using i3rothers.Domain.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
@@ -38,7 +40,17 @@ builder.Host.UseSerilog((hostContext, services, configuration) => {
 });
 
 // Add Bearer Authentication
-builder.Services.AddBearerAuthentication(builder.Configuration);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = builder.Configuration["Server:IdentityServer"];
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false,
+                        ValidateIssuer = false
+                    };
+                    options.RequireHttpsMetadata = false;
+                });
 
 // Add ?
 builder.Services.AddEndpointsApiExplorer();
