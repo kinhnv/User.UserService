@@ -72,7 +72,7 @@ namespace UserService.Infrastructure.Services
             var user = (await _usersRepository.GetAsync(x => x.UserId == @params.UserId)).SingleOrDefault();
 
             if (user == null)
-                return new ServiceNotFoundResult<User>(@params.UserId);
+                return new ServiceNotFoundResult(typeof(User), @params.UserId);
 
             await _usersRepository.DeleteAsync(x => x.UserId == @params.UserId);
             await _roleUsersRepository.DeleteAsync(x => x.UserId == @params.UserId);

@@ -53,7 +53,7 @@ namespace UserService.Infrastructure.Services
             var role = (await _rolesRepository.GetAsync(x => x.RoleId == @params.RoleId)).SingleOrDefault();
             if (role == null)
             {
-                return new ServiceNotFoundResult<Role>(@params.RoleId);
+                return new ServiceNotFoundResult(typeof(Role), @params.RoleId);
             }
 
             await _rolesRepository.DeleteAsync(x => x.RoleId == @params.RoleId);

@@ -144,8 +144,8 @@ namespace UserService.UnitTests.Services
 
             VerifyMockedMethods();
 
-            Assert.IsType<ServiceNotFoundResult<Role>>(result);
-            Assert.Equal(new ServiceNotFoundResult<Role>(_role.RoleId).ErrorMessages.First(), ((ServiceNotFoundResult<Role>)result).ErrorMessages.First());
+            Assert.IsType<ServiceNotFoundResult>(result);
+            Assert.Equal(new ServiceNotFoundResult(typeof(Role), _role.RoleId).ErrorMessages.First(), ((ServiceNotFoundResult)result).ErrorMessages.First());
         }
 
         [Fact]

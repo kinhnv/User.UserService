@@ -205,8 +205,8 @@ namespace UserService.UnitTests.Services
 
             VerifyMockedMethods();
 
-            Assert.IsType<ServiceNotFoundResult<User>>(result);
-            Assert.Equal(new ServiceNotFoundResult<User>(_user.UserId).ErrorMessages.First(), ((ServiceNotFoundResult<User>)result).ErrorMessages.First());
+            Assert.IsType<ServiceNotFoundResult>(result);
+            Assert.Equal(new ServiceNotFoundResult(typeof(User), _user.UserId).ErrorMessages.First(), ((ServiceNotFoundResult)result).ErrorMessages.First());
         }
 
         [Fact]
