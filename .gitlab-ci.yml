@@ -1,77 +1,43 @@
-include: 'https://raw.githubusercontent.com/kinhnv/Platform.Common/main/pipeline/.prepare-ssh.yml'
-
-variables:
-  VERSION: "$CI_PIPELINE_ID"
-  ASPNETCORE_ENVIRONMENT: "Production"
+include: 
+  - "https://raw.githubusercontent.com/kinhnv/Platform.Common/main/pipeline/.prepare-ssh.yml"
+  - "https://raw.githubusercontent.com/kinhnv/Platform.Common/main/pipeline/.dotnet.yml"
 
 stages:
   - build
   - test
   - deploy
 
-.build_tags:
-  tags:
-    - "shell"
-
-.test_tags:
-  tags:
-    - "docker"
-
-.deploy_tags:
-  tags:
-    - "shell"
-
+.production_config:
+  variables:
+    ASPNETCORE_ENVIRONMENT: "Production"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  
 build:
   stage: build
+  variables:
+    VERSION: ${CI_PIPELINE_ID}
+    DOCKERFILE: ${CI_PROJECT_DIR}/UserService.Api/Dockerfile
+    IMAGE: registry.gitlab.com/i3rothers/user/user-service:${CI_PIPELINE_ID}
   extends:
-    - .build_tags
-  only:
-    - main
-  before_script:
-    - sed -i "s/pre-build-params_registry/$REGISTRY/g" ./**/Dockerfile
-    - sed -i "s/pre-build-params_gitlab-source-username/$GITLAB_SOURCE_USERNAME/g" ./**/Dockerfile
-    - sed -i "s/pre-build-params_gitlab-source-token/$GITLAB_SOURCE_TOKEN/g" ./**/Dockerfile
-    - sed -i "s,pre-build-params_gitlab-source-url,$GITLAB_SOURCE_URL,g" ./**/Dockerfile
-  script:
-    - docker build -t $REGISTRY/user.user-service:${VERSION} ${CI_PROJECT_DIR} -f ${CI_PROJECT_DIR}/UserService.Api/Dockerfile
-    - docker push $REGISTRY/user.user-service:${VERSION}
-    - docker image rm $REGISTRY/user.user-service:${VERSION}
-    
+    - .production_config
+    - .dotnet_build
+
 test:
   stage: test
-  image: '$REGISTRY/dotnet/sdk:6.0'
+  variables:
+    VERSION: ${CI_PIPELINE_ID}
+    UNIT_TEST_FOLDER: UserService.UnitTests
   extends:
-    - .test_tags
-  only:
-    - main
-  needs: [build]
-  script:
-    - dotnet nuget add source --username $GITLAB_SOURCE_USERNAME --password $GITLAB_SOURCE_TOKEN --store-password-in-clear-text --name github "$GITLAB_SOURCE_URL"
-    - cd UserService.UnitTests
-    - dotnet test --logger:"console;verbosity=detailed"
-        
+    - .production_config
+    - .dotnet_test
+
 deploy:
   stage: deploy
+  variables:
+    VERSION: ${CI_PIPELINE_ID}
+    TAG_CONFIG: .services.userService.tag
+    VALUE_YAML_FILE: user/values.yaml
   extends:
-    - .deploy_tags
-    - .prepare_ssh
-  only:
-    - main
-  needs: [test]
-  script:
-    - git clone $GITOPS_URL && cd gitops
-    - yq eval ".services.userService.tag = \"${VERSION}\"" -i ./user/values.yaml
-    - git add ./user/values.yaml
-    - git commit -m "change to version $VERSION"
-    - git push
-    - cd .. && rm -rf gitops
-    - git remote set-url origin $GITHUB_URL
-    - >
-      if [ `git branch --list main` ]; then
-        echo "push to existing branch"; 
-        git push -u origin HEAD:main;
-      else
-        echo "create new branch";
-        git checkout -b main; 
-        git push -u origin main;
-      fi
+    - .production_config
+    - .dotnet_deploy
