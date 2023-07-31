@@ -1,11 +1,12 @@
 include: 
-  - "https://raw.githubusercontent.com/kinhnv/Platform.Common/main/pipeline/.prepare-ssh.yml"
-  - "https://raw.githubusercontent.com/kinhnv/Platform.Common/main/pipeline/.dotnet.yml"
+  - "https://raw.githubusercontent.com/kinhnv/Platform.Common/v1.0.4/pipeline/.prepare-ssh.yml"
+  - "https://raw.githubusercontent.com/kinhnv/Platform.Common/v1.0.4/pipeline/.dotnet.yml"
 
 stages:
   - build
   - test
   - deploy
+  - pack
 
 .production_config:
   variables:
@@ -41,3 +42,24 @@ deploy:
   extends:
     - .production_config
     - .dotnet_deploy
+
+pack client:
+  stage: pack
+  variables:
+    API_DIR: ${CI_PROJECT_DIR}/UserService.Api
+    CLIENT_DIR: ${CI_PROJECT_DIR}/i3rothers.UserServiceClient
+    TEMP_DIR: ${CI_PROJECT_DIR}/UserService.Api/temp
+    API_CSPROJ_FILE: ${API_DIR}/UserService.Api.csproj
+    CLIENT_CS_FILE_TEMP: ${TEMP_DIR}/UserServiceClient.cs
+    CLIENT_TS_FILE_TEMP: ${TEMP_DIR}/user-service-client.ts
+    CLIENT_CS_FILE: ${CLIENT_DIR}/UserServiceClient.cs
+    CLIENT_TS_DIR: ${CLIENT_DIR}/projects/user-service-client/src/lib
+    CLIENT_TS_FILE: ${CLIENT_TS_DIR}/user-service-client.ts
+    CLIENT_CSPROJ_FILE: ${CLIENT_DIR}/i3rothers.UserServiceClient.csproj
+    CLIENT_NUPKG_FILE_NO_VERSION_AND_TYPE: ${CLIENT_DIR}/bin/Release/i3rothers.UserServiceClient
+    PREFIX: Test
+    OUTPUT_DIR: ${CLIENT_DIR}/dist/user-service-client
+    PACKAGE_FILE: ${CLIENT_DIR}/projects/user-service-client/package.json
+  extends:
+    - .production_config
+    - .client_pack

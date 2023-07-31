@@ -20,11 +20,11 @@ namespace UserService.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<ApiResult<UserForDetails>> GetAsync()
         {
             var userId = User.GetUserId();
             var result = await _usersService.GetUserAsync(new GetUserParams { UserId = userId ?? Guid.Empty });
-            return Ok(result.ToApiResult());
+            return result.ToApiResult();
         }
     }
 }

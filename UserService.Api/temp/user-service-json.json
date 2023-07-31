@@ -1,0 +1,709 @@
+{
+  "x-generator": "NSwag v13.19.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))",
+  "swagger": "2.0",
+  "info": {
+    "title": "My Title",
+    "version": "1.0.0"
+  },
+  "produces": [
+    "text/plain",
+    "application/json",
+    "text/json"
+  ],
+  "paths": {
+    "/api/Profile": {
+      "get": {
+        "tags": [
+          "Profile"
+        ],
+        "operationId": "Profile_Get",
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiResultOfUserForDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Admin/Roles": {
+      "get": {
+        "tags": [
+          "RolesAdmin"
+        ],
+        "operationId": "RolesAdmin_GetRoles",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "Page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "Take",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "Skip",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiResultOfGetPaginationResultOfRoleForList"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "RolesAdmin"
+        ],
+        "operationId": "RolesAdmin_PostRole",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "role",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RoleForCreating"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiResultOfRoleForDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Admin/Roles/SelectOptions": {
+      "get": {
+        "tags": [
+          "RolesAdmin"
+        ],
+        "operationId": "RolesAdmin_GetSelectOptions",
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiResultOfIEnumerableOfSelectOption"
+            }
+          }
+        }
+      }
+    },
+    "/api/Admin/Roles/{id}": {
+      "get": {
+        "tags": [
+          "RolesAdmin"
+        ],
+        "operationId": "RolesAdmin_GetRole",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiResultOfRoleForDetails"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "RolesAdmin"
+        ],
+        "operationId": "RolesAdmin_PutRole",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          },
+          {
+            "name": "role",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RoleForEditing"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiResultOfRoleForDetails"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "RolesAdmin"
+        ],
+        "operationId": "RolesAdmin_DeleteRole",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiResult"
+            }
+          }
+        }
+      }
+    },
+    "/api/Admin/Users": {
+      "get": {
+        "tags": [
+          "UsersAdmin"
+        ],
+        "operationId": "UsersAdmin_GetUsers",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "Page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "Take",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "Skip",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiResultOfGetPaginationResultOfUserForList"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "UsersAdmin"
+        ],
+        "operationId": "UsersAdmin_PostUser",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserForCreating"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiResultOfUserForDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Admin/Users/{id}": {
+      "get": {
+        "tags": [
+          "UsersAdmin"
+        ],
+        "operationId": "UsersAdmin_GetUser",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiResultOfUserForDetails"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "UsersAdmin"
+        ],
+        "operationId": "UsersAdmin_PutUser",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserForEditing"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiResultOfUserForDetails"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "UsersAdmin"
+        ],
+        "operationId": "UsersAdmin_DeleteUser",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiResult"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ApiResultOfUserForDetails": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/ApiResult"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/UserForDetails"
+            }
+          }
+        }
+      ]
+    },
+    "UserForDetails": {
+      "type": "object",
+      "required": [
+        "userId"
+      ],
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "roleIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      }
+    },
+    "ApiResult": {
+      "type": "object",
+      "required": [
+        "code"
+      ],
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ApiResultOfGetPaginationResultOfRoleForList": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/ApiResult"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/GetPaginationResultOfRoleForList"
+            }
+          }
+        }
+      ]
+    },
+    "GetPaginationResultOfRoleForList": {
+      "type": "object",
+      "required": [
+        "data",
+        "page",
+        "take",
+        "totalRecord",
+        "totalPage",
+        "firstPage",
+        "lastPage"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RoleForList"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "take": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalRecord": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalPage": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "firstPage": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "lastPage": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "RoleForList": {
+      "type": "object",
+      "required": [
+        "roleId"
+      ],
+      "properties": {
+        "roleId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "ApiResultOfIEnumerableOfSelectOption": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/ApiResult"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SelectOption"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "SelectOption": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "ApiResultOfRoleForDetails": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/ApiResult"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/RoleForDetails"
+            }
+          }
+        }
+      ]
+    },
+    "RoleForDetails": {
+      "type": "object",
+      "required": [
+        "roleId"
+      ],
+      "properties": {
+        "roleId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "RoleForCreating": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "RoleForEditing": {
+      "type": "object",
+      "required": [
+        "roleId"
+      ],
+      "properties": {
+        "roleId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "ApiResultOfGetPaginationResultOfUserForList": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/ApiResult"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/GetPaginationResultOfUserForList"
+            }
+          }
+        }
+      ]
+    },
+    "GetPaginationResultOfUserForList": {
+      "type": "object",
+      "required": [
+        "data",
+        "page",
+        "take",
+        "totalRecord",
+        "totalPage",
+        "firstPage",
+        "lastPage"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserForList"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "take": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalRecord": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalPage": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "firstPage": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "lastPage": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "UserForList": {
+      "type": "object",
+      "required": [
+        "userId"
+      ],
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "userName": {
+          "type": "string"
+        }
+      }
+    },
+    "UserForCreating": {
+      "type": "object",
+      "properties": {
+        "userName": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "roleIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      }
+    },
+    "UserForEditing": {
+      "type": "object",
+      "required": [
+        "userId"
+      ],
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "guid"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "roleIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      }
+    }
+  }
+}

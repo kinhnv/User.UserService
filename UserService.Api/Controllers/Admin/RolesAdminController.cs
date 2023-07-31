@@ -20,51 +20,51 @@ namespace UserService.Api.Controllers.Admin
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetRoles([FromQuery] GetRolesParams request)
+        public async Task<ApiResult<GetPaginationResult<RoleForList>>> GetRoles([FromQuery] GetRolesParams request)
         {
             var result = await _rolesService.GetRolesAsync(request);
-            return Ok(result.ToApiResult());
+            return result.ToApiResult();
         }
 
         [HttpGet]
         [Route("SelectOptions")]
-        public async Task<ActionResult> GetSelectOptions()
+        public async Task<ApiResult<IEnumerable<SelectOption>>> GetSelectOptions()
         {
             var result = await _rolesService.GetRolesAsSelectOptionsAsync();
-            return Ok(result.ToApiResult());
+            return result.ToApiResult();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetRole(Guid id)
+        public async Task<ApiResult<RoleForDetails>> GetRole(Guid id)
         {
             var result = await _rolesService.GetRoleAsync(new GetRoleParams { RoleId = id });
-            return Ok(result.ToApiResult());
+            return result.ToApiResult();
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostRole([FromBody] RoleForCreating role)
+        public async Task<ApiResult<RoleForDetails>> PostRole([FromBody] RoleForCreating role)
         {
             var result = await _rolesService.CreateRoleAsync(role);
-            return Ok(result.ToApiResult());
+            return result.ToApiResult();
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutRole(Guid id, [FromBody] RoleForEditing role)
+        public async Task<ApiResult<RoleForDetails>> PutRole(Guid id, [FromBody] RoleForEditing role)
         {
             if (id != role.RoleId)
             {
-                return Ok(new ServiceFailedResult().ToApiResult());
+                return new ServiceFailedResult<RoleForDetails>().ToApiResult();
             }
 
             var result = await _rolesService.EditRoleAsync(role);
-            return Ok(result.ToApiResult());
+            return result.ToApiResult();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRole(Guid id)
+        public async Task<ApiResult> DeleteRole(Guid id)
         {
             var result = await _rolesService.DeleteRoleAsync(new DeleteRoleParams { RoleId = id });
-            return Ok(result.ToApiResult());
+            return result.ToApiResult();
         }
     }
 }

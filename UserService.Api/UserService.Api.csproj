@@ -14,6 +14,11 @@
     <PackageReference Include="i3rothers.AspNetCore" Version="1.0.6" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.6" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.19.0" />
+    <PackageReference Include="NSwag.MSBuild" Version="13.19.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Serilog" Version="2.11.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1" />
@@ -32,5 +37,11 @@
       <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
+  <Target Name="NSwag" AfterTargets="Build">
+    <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development;RUN_FROM=Nswag" Command="$(NSwagExe_Net60) aspnetcore2openapi /assembly:$(TargetDir)UserService.Api.dll /output:temp/user-service-json.json" />
+    <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development;RUN_FROM=Nswag" Command="$(NSwagExe_Net60) openapi2csclient /input:temp/user-service-json.json /namespace:i3rothers.UserServiceClient /output:temp/UserServiceClient.cs" />
+    <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development;RUN_FROM=Nswag" Command="$(NSwagExe_Net60) openapi2tsclient /input:temp/user-service-json.json /template:Angular /injectionTokenType:InjectionToken /typeStyle:Interface /output:temp/user-service-client.ts" />
+    <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development;RUN_FROM=Nswag" Command="$(NSwagExe_Net60) openapi2tsclient /input:temp/user-service-json.json /template:Angular /injectionTokenType:InjectionToken /typeStyle:Interface /output:$(SolutionDir)/i3rothers.UserServiceClient/projects/user-service-client/src/lib/user-service-client.ts" />
+  </Target>
 
 </Project>
