@@ -40,8 +40,10 @@
   <Target Name="NSwag" AfterTargets="Build">
     <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development;RUN_FROM=Nswag" Command="$(NSwagExe_Net60) aspnetcore2openapi /assembly:$(TargetDir)UserService.Api.dll /output:temp/user-service-json.json" />
     <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development;RUN_FROM=Nswag" Command="$(NSwagExe_Net60) openapi2csclient /input:temp/user-service-json.json /namespace:i3rothers.UserServiceClient /output:temp/UserServiceClient.cs" />
-    <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development;RUN_FROM=Nswag" Command="$(NSwagExe_Net60) openapi2tsclient /input:temp/user-service-json.json /template:Angular /injectionTokenType:InjectionToken /typeStyle:Interface /output:temp/user-service-client.ts" />
-    <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development;RUN_FROM=Nswag" Command="$(NSwagExe_Net60) openapi2tsclient /input:temp/user-service-json.json /template:Angular /injectionTokenType:InjectionToken /typeStyle:Interface /output:$(SolutionDir)/i3rothers.UserServiceClient/projects/user-service-client/src/lib/user-service-client.ts" />
+    <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development;RUN_FROM=Nswag" Command="$(NSwagExe_Net60) openapi2tsclient /input:temp/user-service-json.json /template:Angular /injectionTokenType:InjectionToken /typeStyle:Interface /output:temp/user-service-client-angular.ts" />
+    <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development;RUN_FROM=Nswag" Command="$(NSwagExe_Net60) openapi2tsclient /input:temp/user-service-json.json /template:Angular /injectionTokenType:InjectionToken /typeStyle:Interface /output:$(SolutionDir)/i3rothers.UserServiceClient/angular/projects/user-service-client/src/lib/user-service-client-angular.ts" />
+    <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development;RUN_FROM=Nswag" Command="$(NSwagExe_Net60) openapi2tsclient /input:temp/user-service-json.json /injectionTokenType:InjectionToken /typeStyle:Interface /output:temp/user-service-client-fetch.ts" />
+    <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development;RUN_FROM=Nswag" Command="$(NSwagExe_Net60) openapi2tsclient /input:temp/user-service-json.json /injectionTokenType:InjectionToken /typeStyle:Interface /output:$(SolutionDir)/i3rothers.UserServiceClient/fetch/index.ts" />
   </Target>
 
 </Project>

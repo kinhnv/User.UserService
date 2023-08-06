@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 appsettings.Development.Extensions.json
 .vscode
+/i3rothers.UserServiceClient/angular/projects/user-service-client/src/lib/user-service-client-angular.ts
+/i3rothers.UserServiceClient/fetch/index.ts
