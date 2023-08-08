@@ -1,5 +1,5 @@
 {
-  "name": "@i3rothers/user-service-client",
+  "name": "@i3rothers/user-service-client-angular",
   "version": "VERSION",
   "peerDependencies": {
     "@angular/common": "^14.0.0",
