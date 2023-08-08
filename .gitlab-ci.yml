@@ -61,7 +61,7 @@ pack client:
     CLIENT_FETCH_FILE: ${FETCH_CLIENT_DIR}/index.ts
     CLIENT_CSPROJ_FILE: ${DOTNET_CLIENT_DIR}/i3rothers.UserServiceClient.csproj
     CLIENT_NUPKG_FILE_NO_VERSION_AND_TYPE: ${DOTNET_CLIENT_DIR}/bin/Release/i3rothers.UserServiceClient
-    PREFIX: Test
+    PREFIX: User
     OUTPUT_DIR: ${ANGULAR_CLIENT_DIR}/dist/user-service-client
     ANGULAR_PACKAGE_FILE: ${ANGULAR_CLIENT_DIR}/projects/user-service-client/package.json
     FECTH_PACKAGE_FILE: ${FETCH_CLIENT_DIR}/package.json
