@@ -68,3 +68,4 @@ pack client:
   extends:
     - .production_config
     - .client_pack
+
